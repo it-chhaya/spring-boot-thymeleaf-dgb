@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/adminLayout}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Category</title>
+</head>
+<body>
+<div layout:fragment="adminContent">
+    <!-- Start Heading -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">Category Management</h1>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- End Heading -->
+
+    <!-- Start Form Category -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Create a new category</h3>
+        </div>
+        <!-- /.card-header -->
+        <!-- form start -->
+        <form role="form"
+              method="post"
+              th:action="@{/admin/categories}"
+              th:object="${category}">
+            <div class="card-body">
+                <div class="form-group row mb-0">
+                    <div class="col-10">
+                        <input type="text"
+                               class="form-control"
+                               th:classappend="${#fields.hasErrors('name')?'is-invalid':''}"
+                               placeholder="Enter category name"
+                               th:field="*{name}">
+                        <span th:if="${#fields.hasErrors('name')}"
+                              class="error invalid-feedback"
+                              th:text="${#fields.errors('name').get(0)}">
+                            Error Message</span>
+                    </div>
+                    <div class="col-2">
+                        <button type="submit" class="btn btn-block bg-gradient-info">Create</button>
+                    </div>
+                </div>
+            </div>
+            <!-- /.card-body -->
+        </form>
+    </div>
+    <!-- End Form Category -->
+
+    <!-- Start Data Listing -->
+    <div class="row">
+        <div class="col-10">
+            <div class="callout callout-info p-2">
+                <p>Follow the steps to continue to payment.</p>
+            </div>
+        </div>
+        <div class="col-1">
+            <button type="submit" class="btn btn-block bg-gradient-primary">Edit</button>
+        </div>
+        <div class="col-1">
+            <button type="submit" class="btn btn-block bg-gradient-danger">Delete</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-10">
+            <div class="callout callout-info p-2">
+                <p>Follow the steps to continue to payment.</p>
+            </div>
+        </div>
+        <div class="col-1">
+            <button type="submit" class="btn btn-block bg-gradient-primary">Edit</button>
+        </div>
+        <div class="col-1">
+            <button type="submit" class="btn btn-block bg-gradient-danger">Delete</button>
+        </div>
+    </div>
+    <!-- End Data Listing -->
+
+    <div th:replace="fragments/modal::modalMessage(message=${message})"></div>
+
+</div>
+
+<th:block layout:fragment="scripts">
+    <script th:inline="javascript">
+        $(function () {
+            if ([[${isSaved}]]) {
+                $('#modalMessage').modal('show')
+            }
+        })
+    </script>
+</th:block>
+
+</body>
+</html>
