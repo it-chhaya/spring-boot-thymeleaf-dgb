@@ -8,6 +8,17 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <style>
+        .img-article-data {
+            border: 3px solid #adb5bd;
+            margin: 0 auto;
+            padding: 3px;
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 10%;
+        }
+    </style>
 </head>
 <body>
 
@@ -38,7 +49,8 @@
                     </div>
                     <div class="card-tools">
                         <div class="input-group input-group-sm" style="width: 150px;">
-                            <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
+                            <input type="text" name="table_search" class="form-control float-right"
+                                   placeholder="Search">
 
                             <div class="input-group-append">
                                 <button type="submit" class="btn btn-default"><i class="fas fa-search"></i></button>
@@ -50,43 +62,55 @@
                 <div class="card-body table-responsive p-0">
                     <table class="table table-hover text-nowrap">
                         <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>User</th>
-                            <th>Date</th>
-                            <th>Status</th>
-                            <th>Reason</th>
-                        </tr>
+                            <tr>
+                                <th>No</th>
+                                <th>Title</th>
+                                <th>Thumbnail</th>
+                                <th>Author</th>
+                                <th>Published</th>
+                                <th>Action</th>
+                            </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td>183</td>
-                            <td>John Doe</td>
-                            <td>11-7-2014</td>
-                            <td><span class="tag tag-success">Approved</span></td>
-                            <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-                        </tr>
-                        <tr>
-                            <td>219</td>
-                            <td>Alexander Pierce</td>
-                            <td>11-7-2014</td>
-                            <td><span class="tag tag-warning">Pending</span></td>
-                            <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-                        </tr>
-                        <tr>
-                            <td>657</td>
-                            <td>Bob Doe</td>
-                            <td>11-7-2014</td>
-                            <td><span class="tag tag-primary">Approved</span></td>
-                            <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-                        </tr>
-                        <tr>
-                            <td>175</td>
-                            <td>Mike Doe</td>
-                            <td>11-7-2014</td>
-                            <td><span class="tag tag-danger">Denied</span></td>
-                            <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-                        </tr>
+                            <tr th:each="article, state : ${articleList}" th:object="${article}">
+                                <td class="count" th:text="${state.count}"></td>
+                                <td class="title" th:text="*{title}"></td>
+                                <td class="thumbnail">
+                                    <img th:src="@{/images/{uri}(uri=*{thumbnail})}"
+                                         th:alt="*{title}"
+                                         class="img-article-data img-fluid">
+                                </td>
+                                <td class="author" th:text="*{author}"></td>
+                                <td class="published" th:text="*{publishedDate}"></td>
+                                <td>
+                                    <button th:data-id="*{articleId}"
+                                            th:data-category-id="*{category.id}"
+                                            th:data-description="*{description}"
+                                            th:data-thumbnail="*{thumbnail}"
+                                            th:data-title="*{title}"
+                                            type="button"
+                                            class="btnViewArticle btn bg-gradient-info">
+                                        <i class="fa fa-eye" aria-hidden="true"></i>
+                                    </button>
+                                    <button th:data-id="*{articleId}"
+                                            th:data-category-id="*{category.id}"
+                                            th:data-description="*{description}"
+                                            th:data-thumbnail="*{thumbnail}"
+                                            th:data-title="*{title}"
+                                            type="button"
+                                            class="btnEditArticle btn bg-gradient-success">
+                                        <i class="fa fa-edit" aria-hidden="true"></i>
+                                    </button>
+                                    <button th:data-id="*{articleId}"
+                                            th:data-category-id="*{category.id}"
+                                            th:data-description="*{description}"
+                                            th:data-thumbnail="*{thumbnail}"
+                                            type="button"
+                                            class="btnDeleteArticle btn bg-gradient-danger">
+                                        <i class="fa fa-trash" aria-hidden="true"></i>
+                                    </button>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -100,6 +124,9 @@
 
 </div>
 
+<th:block layout:fragment="scripts">
+    <script src="/js/article.js"></script>
+</th:block>
 
 </body>
 </html>
