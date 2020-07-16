@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/adminLayout}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<div layout:fragment="adminContent">
+
+
+    <!-- Start Heading -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">User Details</h1>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- End Heading -->
+
+    <div class="card">
+        <div class="card-header">
+            <div class="card-title">
+                List users
+            </div>
+            <div class="card-tools">
+                <div class="input-group input-group-sm" style="width: 150px;">
+                    <input type="text" name="table_search" class="form-control float-right"
+                           placeholder="Search">
+
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-default"><i class="fas fa-search"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-body table-responsive p-0">
+            <table class="table table-hover text-nowrap">
+                <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Full Name</th>
+                    <th>Email</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="user, state : ${users}" th:object="${user}">
+                    <td class="count" th:text="${state.count}"></td>
+                    <td class="title" th:text="*{firstName + ' ' + lastName}"></td>
+                    <td class="author" th:text="*{email}"></td>
+                    <td>
+                        <button type="button"
+                                class="btnViewUser btn bg-gradient-info">
+                            <i class="fa fa-eye" aria-hidden="true"></i>
+                        </button>
+                        <a th:href="@{/admin/users/edit/{userId}(userId=*{userId})}"
+                                type="button"
+                                class="btnEditUser btn bg-gradient-success">
+                            <i class="fa fa-edit" aria-hidden="true"></i>
+                        </a>
+                        <button type="button"
+                                th:data-user-id="*{userId}"
+                                class="btnDeleteUser btn bg-gradient-danger">
+                            <i class="fa fa-trash" aria-hidden="true"></i>
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div th:replace="~{/fragments/modal :: modalMessage(message = ${message})}"></div>
+    <div th:replace="~{/fragments/modal :: modalConfirm}"></div>
+
+</div>
+
+<th:block layout:fragment="scripts">
+    <script th:inline="javascript">
+
+        if ([[${isSaved}]]) {
+            $('#modalMessage').modal('show')
+        }
+
+        if ([[${isDeleted}]]) {
+            $('#modalMessage').modal('show')
+        }
+
+        if ([[${isUpdated}]]) {
+            $('#modalMessage').modal('show')
+        }
+
+    </script>
+    <script src="/js/user.js"></script>
+</th:block>
+
+</body>
+</html>

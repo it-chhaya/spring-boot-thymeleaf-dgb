@@ -1,7 +1,7 @@
 package com.chhaya.thymeleaf.service.admin.impl;
 
 import com.chhaya.thymeleaf.model.Category;
-import com.chhaya.thymeleaf.repository.admin.impl.CategoryRepositoryImpl;
+import com.chhaya.thymeleaf.repository.admin.jdbc.impl.CategoryRepositoryImpl;
 import com.chhaya.thymeleaf.service.admin.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

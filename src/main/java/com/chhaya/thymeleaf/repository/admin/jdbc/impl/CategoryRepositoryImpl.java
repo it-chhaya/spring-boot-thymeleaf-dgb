@@ -1,7 +1,7 @@
-package com.chhaya.thymeleaf.repository.admin.impl;
+package com.chhaya.thymeleaf.repository.admin.jdbc.impl;
 
 import com.chhaya.thymeleaf.model.Category;
-import com.chhaya.thymeleaf.repository.admin.CategoryRepository;
+import com.chhaya.thymeleaf.repository.admin.jdbc.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;

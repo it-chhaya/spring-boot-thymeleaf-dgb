@@ -1,9 +1,11 @@
-$(function () {
-
+$('#btnAddArticle').on('click', function() {
+    $('.modal-title').text('Add Article')
 })
 
 $('.btnEditArticle').on('click', function (e) {
     e.preventDefault()
+
+    $('.modal-title').text('Update Article')
 
     let article = {
         articleId: $(this).data('id'),

@@ -1,4 +1,4 @@
-package com.chhaya.thymeleaf.repository.admin;
+package com.chhaya.thymeleaf.repository.admin.jdbc;
 
 import com.chhaya.thymeleaf.model.Article;
 

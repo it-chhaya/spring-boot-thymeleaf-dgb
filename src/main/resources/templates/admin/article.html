@@ -42,7 +42,7 @@
             <div class="card">
                 <div class="card-header">
                     <div class="card-title">
-                        <button type="button" data-toggle="modal" data-target="#modalAddArticle"
+                        <button id="btnAddArticle" type="button" data-toggle="modal" data-target="#modalAddArticle"
                                 class="btn btn-block bg-gradient-primary">
                             <i class="fa fa-plus-circle" aria-hidden="true"></i>
                         </button>
@@ -76,8 +76,10 @@
                                 <td class="count" th:text="${state.count}"></td>
                                 <td class="title" th:text="*{title}"></td>
                                 <td class="thumbnail">
-                                    <img th:src="@{/images/{uri}(uri=*{thumbnail})}"
+                                    <img th:if="*{thumbnail != ''}" th:src="@{/images/{uri}(uri=*{thumbnail})}"
                                          th:alt="*{title}"
+                                         class="img-article-data img-fluid">
+                                    <img th:if="*{thumbnail == ''}" src="/img/placeholder-02.png"
                                          class="img-article-data img-fluid">
                                 </td>
                                 <td class="author" th:text="*{author}"></td>

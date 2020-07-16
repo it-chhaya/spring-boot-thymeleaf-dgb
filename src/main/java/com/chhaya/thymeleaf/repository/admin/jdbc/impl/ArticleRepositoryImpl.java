@@ -1,18 +1,12 @@
-package com.chhaya.thymeleaf.repository.admin.impl;
+package com.chhaya.thymeleaf.repository.admin.jdbc.impl;
 
 import com.chhaya.thymeleaf.model.Article;
-import com.chhaya.thymeleaf.repository.admin.ArticleRepository;
-import com.chhaya.thymeleaf.repository.admin.mapper.ArticleRowMapper;
+import com.chhaya.thymeleaf.repository.admin.jdbc.ArticleRepository;
+import com.chhaya.thymeleaf.repository.admin.jdbc.mapper.ArticleRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementSetter;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 
 @Repository

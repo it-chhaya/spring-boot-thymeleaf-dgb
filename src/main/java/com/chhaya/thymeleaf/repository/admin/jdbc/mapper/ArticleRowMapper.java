@@ -1,4 +1,4 @@
-package com.chhaya.thymeleaf.repository.admin.mapper;
+package com.chhaya.thymeleaf.repository.admin.jdbc.mapper;
 
 import com.chhaya.thymeleaf.model.Article;
 import com.chhaya.thymeleaf.model.Category;

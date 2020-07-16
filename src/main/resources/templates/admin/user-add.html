@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/adminLayout}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<div layout:fragment="adminContent">
+
+    <!-- Start Heading -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">Create a new user</h1>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- End Heading -->
+
+    <div class="card">
+        <div class="card-body register-card-body">
+            <form th:action="!${isUpdate}?'/admin/users/add':'/admin/users/edit/'+${user.userId}" method="post"
+                  th:object="${user}">
+                <div class="row">
+                    <div class="input-group mb-3 col-6">
+                        <input th:field="*{firstName}"
+                               type="text"
+                               class="form-control"
+                               placeholder="First name"
+                               th:classappend="${#fields.hasErrors('firstName')?'is-invalid':''}">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-user"></span>
+                            </div>
+                        </div>
+                        <span th:if="${#fields.hasErrors('firstName')}"
+                              class="error invalid-feedback"
+                              th:text="${#fields.errors('firstName').get(0)}">Test</span>
+                    </div>
+                    <div class="input-group mb-3 col-6">
+                        <input th:field="*{lastName}"
+                               type="text"
+                               class="form-control"
+                               placeholder="Last name"
+                               th:classappend="${#fields.hasErrors('lastName')?'is-invalid':''}">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-user"></span>
+                            </div>
+                        </div>
+                        <span th:if="${#fields.hasErrors('lastName')}"
+                              class="error invalid-feedback"
+                              th:text="${#fields.errors('lastName').get(0)}">Test</span>
+                    </div>
+                </div>
+
+                <div class="input-group mb-3 email">
+                    <input th:field="*{email}" type="email" class="form-control" placeholder="Email">
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-envelope"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="password input-group mb-3">
+                    <input th:field="*{password}" type="password" class="form-control input-password"
+                           placeholder="Password">
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-lock"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="password input-group mb-3">
+                    <input name="confirm" type="password" class="form-control input-confirm"
+                           placeholder="Retype password">
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-lock"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <button type="button" class="btn bg-gradient-danger btn-block">Cancel</button>
+                    </div>
+                    <div class="col-6">
+                        <button id="btnSaveUser" type="submit" class="btn bg-gradient-primary btn-block">Save</button>
+                    </div>
+                    <!-- /.col -->
+                </div>
+            </form>
+        </div>
+        <!-- /.form-box -->
+    </div>
+
+    <div th:replace="~{/fragments/modal :: modalMessage(message = ${message})}"></div>
+
+</div>
+
+<th:block layout:fragment="scripts">
+    <script th:inline="javascript">
+
+        if ([[${pwdError}]]) {
+            $('#modalMessage').modal('show')
+        }
+
+        if ([[${isUpdate}]]) {
+            $('.password').css('display', 'none')
+            $('.email').css('display', 'none')
+        }
+
+    </script>
+</th:block>
+
+</body>
+</html>
