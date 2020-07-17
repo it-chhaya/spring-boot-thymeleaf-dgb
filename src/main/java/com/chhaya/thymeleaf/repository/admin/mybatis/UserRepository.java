@@ -32,7 +32,7 @@ public interface UserRepository {
                     @Result(property = "firstName", column = "first_name"),
                     @Result(property = "lastName", column = "last_name")
             })
-    List<User> findAll();
+    List<User> findAll(Paging paging);
 
     /*@Select("SELECT * FROM users " +
             "WHERE user_id = #{userId} AND status = true")*/
@@ -44,5 +44,15 @@ public interface UserRepository {
             "VALUES (#{userId}, #{firstName}, #{lastName}, #{email}, #{password})")*/
     @InsertProvider(type = UserProvider.class, method = "insertUserSql")
     boolean save(User user);
+
+    @Select("SELECT COUNT(*) FROM users WHERE status = true")
+    int countUser();
+
+    @SelectProvider(type = UserProvider.class, method = "searchUserByKeywordSql")
+    @ResultMap("userResult")
+    List<User> searchUserByKeyword(@Param("keyword") String keyword, Paging paging);
+
+    @SelectProvider(type = UserProvider.class, method = "countSearchResultSql")
+    int countSearchResult(@Param("keyword") String keyword);
 
 }

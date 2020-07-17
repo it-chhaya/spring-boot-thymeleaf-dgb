@@ -20,8 +20,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> findAll() {
-        return userRepository.findAll();
+    public List<User> findAll(Paging paging) {
+        paging.setTotalCount(userRepository.countUser());
+        return userRepository.findAll(paging);
     }
 
     @Override
@@ -42,5 +43,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteByUserId(String userId) {
         userRepository.deleteByUserId(userId);
+    }
+
+    @Override
+    public List<User> searchUserByKeyword(String keyword, Paging paging) {
+        paging.setTotalCount(userRepository.countSearchResult(keyword));
+        return userRepository.searchUserByKeyword(keyword, paging);
     }
 }

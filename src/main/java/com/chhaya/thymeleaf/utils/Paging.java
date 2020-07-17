@@ -17,7 +17,7 @@ public class Paging {
     private int offset;
 
     public Paging() {
-        this(1, 2, 0, 0, 5);
+        this(1, 5, 0, 0, 5);
     }
 
     public Paging(int page, int limit, int totalCount, int totalPages, int pagesToShow) {
@@ -95,24 +95,21 @@ public class Paging {
         if (totalPages <= pagesToShow) {
             startPage = 1;
             endPage = totalPages;
-
         } else if (page - halfPagesToShow <= 0) {
             startPage = 1;
             endPage = pagesToShow;
-
         } else if (page + halfPagesToShow == totalPages) {
             startPage = page - halfPagesToShow;
             endPage = totalPages;
-
         } else if (page + halfPagesToShow > totalPages) {
             startPage = totalPages - pagesToShow + 1;
             endPage = totalPages;
-
         } else {
             startPage = page - halfPagesToShow;
             endPage = page + halfPagesToShow;
         }
     }
+
 
     @Override
     public String toString() {

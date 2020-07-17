@@ -31,14 +31,15 @@
                 List users
             </div>
             <div class="card-tools">
-                <div class="input-group input-group-sm" style="width: 150px;">
-                    <input type="text" name="table_search" class="form-control float-right"
-                           placeholder="Search">
-
-                    <div class="input-group-append">
-                        <button type="submit" class="btn btn-default"><i class="fas fa-search"></i></button>
+                <form th:action="@{/admin/users}" method="get">
+                    <div class="input-group input-group-sm" style="width: 350px;">
+                        <input type="text" name="keyword" class="form-control float-right"
+                               placeholder="Search">
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-default"><i class="fas fa-search"></i></button>
+                        </div>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
         <div class="card-body table-responsive p-0">
@@ -62,8 +63,8 @@
                             <i class="fa fa-eye" aria-hidden="true"></i>
                         </button>
                         <a th:href="@{/admin/users/edit/{userId}(userId=*{userId})}"
-                                type="button"
-                                class="btnEditUser btn bg-gradient-success">
+                           type="button"
+                           class="btnEditUser btn bg-gradient-success">
                             <i class="fa fa-edit" aria-hidden="true"></i>
                         </a>
                         <button type="button"
@@ -75,6 +76,37 @@
                 </tr>
                 </tbody>
             </table>
+        </div>
+        <div class="card-footer"
+             th:if="${paging.totalPages} > 1">
+            <ul class="pagination">
+                <li class="paginate_button page-item previous"
+                    th:classappend="${paging.page == 1}?'disabled':''">
+                    <a th:href="@{/admin/users(page=${paging.previousPage},keyword=${keyword})}"
+                       aria-controls="example2"
+                       data-dt-idx="0"
+                       tabindex="0"
+                       class="page-link">Previous</a>
+                </li>
+
+                <!-- Loop page to show -->
+                <li class="paginate_button page-item"
+                    th:classappend="${paging.page == i}?'active':''"
+                    th:each="i:${#numbers.sequence(paging.startPage, paging.endPage)}">
+                    <a th:href="@{/admin/users(page=${i},keyword=${keyword})}"
+                       th:text="${i}"
+                       aria-controls="example2"
+                       data-dt-idx="1"
+                       tabindex="0" class="page-link">1</a>
+                </li>
+
+                <li class="paginate_button page-item next"
+                    th:classappend="${paging.page}==${paging.totalPages}?'disabled':''">
+                    <a th:href="@{/admin/users(page=${paging.nextPage},keyword=${keyword})}" aria-controls="example2"
+                       data-dt-idx="7" tabindex="0"
+                       class="page-link">Next</a>
+                </li>
+            </ul>
         </div>
     </div>
 

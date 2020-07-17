@@ -2,6 +2,7 @@ package com.chhaya.thymeleaf.controller.admin;
 
 import com.chhaya.thymeleaf.model.User;
 import com.chhaya.thymeleaf.service.admin.impl.UserServiceImpl;
+import com.chhaya.thymeleaf.utils.Paging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -66,10 +68,21 @@ public class UserController {
     }
 
     @GetMapping
-    public String userView(ModelMap map) {
+    public String userView(ModelMap map,
+                           Paging paging,
+                           @RequestParam(required = false) String keyword) {
 
+        List<User> users;
 
-        map.addAttribute("users", userService.findAll());
+        if (keyword == null) {
+            users = userService.findAll(paging);
+        } else {
+            users = userService.searchUserByKeyword(keyword, paging);
+        }
+
+        map.addAttribute("paging", paging);
+        map.addAttribute("users", users);
+        map.addAttribute("keyword", keyword);
 
         return USER_DETAILS_VIEW;
     }

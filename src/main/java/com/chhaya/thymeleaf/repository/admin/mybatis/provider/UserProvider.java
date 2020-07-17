@@ -32,6 +32,8 @@ public class UserProvider {
             FROM("users");
             WHERE("status = true");
             ORDER_BY("id DESC");
+            OFFSET("#{offset}");
+            LIMIT("#{limit}");
         }}.toString();
     }
 
@@ -40,6 +42,37 @@ public class UserProvider {
             SELECT("*");
             FROM("users");
             WHERE("user_id = #{userId}");
+            AND();
+            WHERE("status = true");
+        }}.toString();
+    }
+
+    public String searchUserByKeywordSql() {
+        return new SQL() {{
+            SELECT("*");
+            FROM("users");
+            WHERE("first_name ilike '%' || #{keyword} || '%'");
+            OR();
+            WHERE("last_name ilike '%' || #{keyword} || '%'");
+            OR();
+            WHERE("email ilike '%' || #{keyword} || '%'");
+            AND();
+            WHERE("status = true");
+            ORDER_BY("id DESC");
+            OFFSET("#{paging.offset}");
+            LIMIT("#{paging.limit}");
+        }}.toString();
+    }
+
+    public String countSearchResultSql() {
+        return new SQL() {{
+            SELECT("COUNT(*)");
+            FROM("users");
+            WHERE("first_name ilike '%' || #{keyword} || '%'");
+            OR();
+            WHERE("last_name ilike '%' || #{keyword} || '%'");
+            OR();
+            WHERE("email ilike '%' || #{keyword} || '%'");
             AND();
             WHERE("status = true");
         }}.toString();
