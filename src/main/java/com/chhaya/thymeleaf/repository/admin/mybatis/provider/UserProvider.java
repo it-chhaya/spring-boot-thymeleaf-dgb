@@ -51,13 +51,11 @@ public class UserProvider {
         return new SQL() {{
             SELECT("*");
             FROM("users");
-            WHERE("first_name ilike '%' || #{keyword} || '%'");
+            WHERE("first_name ilike '%' || #{keyword} || '%'", "status = true");
             OR();
-            WHERE("last_name ilike '%' || #{keyword} || '%'");
+            WHERE("last_name ilike '%' || #{keyword} || '%'", "status = true");
             OR();
-            WHERE("email ilike '%' || #{keyword} || '%'");
-            AND();
-            WHERE("status = true");
+            WHERE("email ilike '%' || #{keyword} || '%'", "status = true");
             ORDER_BY("id DESC");
             OFFSET("#{paging.offset}");
             LIMIT("#{paging.limit}");
@@ -68,13 +66,30 @@ public class UserProvider {
         return new SQL() {{
             SELECT("COUNT(*)");
             FROM("users");
-            WHERE("first_name ilike '%' || #{keyword} || '%'");
+            WHERE("first_name ilike '%' || #{keyword} || '%'", "status = true");
             OR();
-            WHERE("last_name ilike '%' || #{keyword} || '%'");
+            WHERE("last_name ilike '%' || #{keyword} || '%'", "status = true");
             OR();
-            WHERE("email ilike '%' || #{keyword} || '%'");
+            WHERE("email ilike '%' || #{keyword} || '%'", "status = true");
+        }}.toString();
+    }
+
+    public String selectUserByEmailSql() {
+        return new SQL(){{
+            SELECT("*");
+            FROM("users");
+            WHERE("email = #{email}");
             AND();
             WHERE("status = true");
+        }}.toString();
+    }
+
+    public String selectRolesByIdSql() {
+        return new SQL(){{
+            SELECT("r.id, r.name");
+            FROM("roles r");
+            INNER_JOIN("users_roles ur ON ur.role_id = r.id");
+            WHERE("ur.user_id = #{id}");
         }}.toString();
     }
 

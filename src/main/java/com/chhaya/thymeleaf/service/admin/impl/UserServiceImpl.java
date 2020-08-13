@@ -5,8 +5,11 @@ import com.chhaya.thymeleaf.repository.admin.mybatis.UserRepository;
 import com.chhaya.thymeleaf.service.admin.UserService;
 import com.chhaya.thymeleaf.utils.Paging;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -27,7 +30,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User save(User user) {
-        return userRepository.save(user) ? user : null;
+
+        if (userRepository.save(user)) {
+            if (userRepository.createUserRole(user)) {
+                return user;
+            }
+        }
+
+        return null;
     }
 
     @Override
@@ -37,7 +47,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User updateByUserId(User newUser) {
-        return userRepository.updateByUserId(newUser) ? newUser : null;
+        if (userRepository.updateByUserId(newUser))
+            if (userRepository.updateUserRole(newUser))
+                return newUser;
+        return null;
     }
 
     @Override
@@ -50,4 +63,12 @@ public class UserServiceImpl implements UserService {
         paging.setTotalCount(userRepository.countSearchResult(keyword));
         return userRepository.searchUserByKeyword(keyword, paging);
     }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+
+        return userRepository.selectUserByEmail(email);
+
+    }
+
 }

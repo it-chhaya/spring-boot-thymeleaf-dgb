@@ -1,10 +1,14 @@
 package com.chhaya.thymeleaf.controller.admin;
 
 import com.chhaya.thymeleaf.model.Article;
+import com.chhaya.thymeleaf.model.User;
 import com.chhaya.thymeleaf.service.admin.impl.ArticleServiceImpl;
 import com.chhaya.thymeleaf.service.admin.impl.CategoryServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -54,6 +58,11 @@ public class ArticleController {
     public String saveArticleAction(@ModelAttribute Article article,
                                     @RequestParam("file") MultipartFile file) {
 
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
+
+        User authUser = ((User) authentication.getPrincipal());
+
         String fileName = file.getOriginalFilename();
         String uri = UUID.randomUUID() + fileName.substring(fileName.indexOf("."));
 
@@ -64,7 +73,7 @@ public class ArticleController {
         }
 
         article.setArticleId(UUID.randomUUID().toString());
-        article.setAuthor("Admin");
+        article.setAuthor(authUser.getFirstName() + " " + authUser.getLastName());
         article.setPublishedDate(new Date(System.currentTimeMillis()));
         article.setThumbnail(uri);
 

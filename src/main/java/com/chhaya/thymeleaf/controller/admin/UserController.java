@@ -1,9 +1,11 @@
 package com.chhaya.thymeleaf.controller.admin;
 
 import com.chhaya.thymeleaf.model.User;
+import com.chhaya.thymeleaf.service.admin.impl.RoleServiceImpl;
 import com.chhaya.thymeleaf.service.admin.impl.UserServiceImpl;
 import com.chhaya.thymeleaf.utils.Paging;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -26,9 +28,19 @@ public class UserController {
 
     private UserServiceImpl userService;
 
+    private RoleServiceImpl roleService;
+
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
     @Autowired
-    public UserController(UserServiceImpl userService) {
+    public UserController(UserServiceImpl userService, RoleServiceImpl roleService) {
         this.userService = userService;
+        this.roleService = roleService;
+    }
+
+    @Autowired
+    public void setbCryptPasswordEncoder(BCryptPasswordEncoder bCryptPasswordEncoder) {
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     @GetMapping("/add")
@@ -36,6 +48,7 @@ public class UserController {
                               ModelMap map) {
 
         map.addAttribute("user", user);
+        map.addAttribute("roles", roleService.select());
 
         return ADD_USER_VIEW;
     }
@@ -58,6 +71,7 @@ public class UserController {
         }
 
         user.setUserId(UUID.randomUUID().toString());
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 
         if (userService.save(user) != null) {
             redirect.addFlashAttribute("isSaved", true);
@@ -103,7 +117,10 @@ public class UserController {
     public String editUserView(@PathVariable String userId,
                                  ModelMap map) {
 
+        System.out.println(userService.findOne(userId));
+
         map.addAttribute("user", userService.findOne(userId));
+        map.addAttribute("roles", roleService.select());
         map.addAttribute("isUpdate", true);
 
         return ADD_USER_VIEW;
@@ -119,6 +136,8 @@ public class UserController {
             map.addAttribute("isUpdate", true);
             return ADD_USER_VIEW;
         }
+
+        System.out.println("My user = " + user);
 
         if (userService.updateByUserId(user) != null) {
             redirect.addFlashAttribute("isUpdated", true);

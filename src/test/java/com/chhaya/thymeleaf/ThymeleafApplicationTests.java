@@ -6,6 +6,7 @@ import com.chhaya.thymeleaf.service.admin.impl.UserServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.List;
 import java.util.UUID;
@@ -15,6 +16,7 @@ class ThymeleafApplicationTests {
 
     private UserServiceImpl userService;
     private UserRepository userRepository;
+    private BCryptPasswordEncoder encoder;
 
     @Autowired
     public void setUserRepository(UserRepository userRepository) {
@@ -24,6 +26,11 @@ class ThymeleafApplicationTests {
     @Autowired
     public void setUserService(UserServiceImpl userService) {
         this.userService = userService;
+    }
+
+    @Autowired
+    public void setEncoder(BCryptPasswordEncoder encoder) {
+        this.encoder = encoder;
     }
 
     @Test
@@ -90,6 +97,24 @@ class ThymeleafApplicationTests {
         userRepository.updateByUserId(newUser);
     }
 
+    @Test
+    void selectUserByEmail() {
+        System.out.println(userRepository.selectUserByEmail("it.chhaya@gmail.com"));
+    }
 
+    @Test
+    void selectRolesById() {
+        System.out.println(userRepository.selectRolesById(3));
+    }
+
+    @Test
+    void generatePassword() {
+        System.out.println(encoder.encode("123"));
+    }
+
+    @Test
+    void createUserRole() {
+        //userRepository.createUserRole()
+    }
 
 }

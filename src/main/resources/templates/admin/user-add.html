@@ -28,8 +28,20 @@
         <div class="card-body register-card-body">
             <form th:action="!${isUpdate}?'/admin/users/add':'/admin/users/edit/'+${user.userId}" method="post"
                   th:object="${user}">
+
+                <div class="input-group mb-3">
+                    <select class="custom-select" th:field="*{roles[0].id}">
+                        <option disabled="disabled" selected="selected" value="0">Please choose ROLE to create</option>
+                        <option th:each="role : ${roles}"
+                                th:value="${role.id}"
+                                th:text="${role.name}">Role</option>
+                    </select>
+                </div>
+
+
                 <div class="row">
                     <div class="input-group mb-3 col-6">
+                        <input type="hidden" th:field="*{id}">
                         <input th:field="*{firstName}"
                                type="text"
                                class="form-control"
