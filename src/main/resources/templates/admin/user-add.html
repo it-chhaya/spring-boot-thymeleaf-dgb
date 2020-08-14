@@ -38,6 +38,16 @@
                     </select>
                 </div>
 
+                <div class="form-group">
+                    <p>Please choose <span class="font-weight-bold">Role-Authority</span> for user:</p>
+                    <div class="custom-control custom-checkbox" th:each="auth, state : ${auths}">
+                        <input class="custom-control-input" type="checkbox" th:id="${auth.id}" th:value="${auth.id}" th:field="*{roles[0].authorities[__${state.index}__].id}"> <!---->
+                        <label th:for="${auth.id}" th:text="${auth.name}" class="custom-control-label">Custom Checkbox</label>
+                    </div>
+                </div>
+
+
+                <hr class="my-4">
 
                 <div class="row">
                     <div class="input-group mb-3 col-6">

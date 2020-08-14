@@ -1,6 +1,8 @@
 package com.chhaya.thymeleaf.controller.admin;
 
+import com.chhaya.thymeleaf.model.Authority;
 import com.chhaya.thymeleaf.model.User;
+import com.chhaya.thymeleaf.service.admin.impl.AuthorityServiceImpl;
 import com.chhaya.thymeleaf.service.admin.impl.RoleServiceImpl;
 import com.chhaya.thymeleaf.service.admin.impl.UserServiceImpl;
 import com.chhaya.thymeleaf.utils.Paging;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -30,12 +33,15 @@ public class UserController {
 
     private RoleServiceImpl roleService;
 
+    private AuthorityServiceImpl authorityService;
+
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
-    public UserController(UserServiceImpl userService, RoleServiceImpl roleService) {
+    public UserController(UserServiceImpl userService, RoleServiceImpl roleService, AuthorityServiceImpl authorityService) {
         this.userService = userService;
         this.roleService = roleService;
+        this.authorityService = authorityService;
     }
 
     @Autowired
@@ -47,8 +53,11 @@ public class UserController {
     public String addUserView(User user,
                               ModelMap map) {
 
+        List<Authority> authorities = authorityService.select();
+
         map.addAttribute("user", user);
         map.addAttribute("roles", roleService.select());
+        map.addAttribute("auths", authorities);
 
         return ADD_USER_VIEW;
     }
@@ -72,6 +81,8 @@ public class UserController {
 
         user.setUserId(UUID.randomUUID().toString());
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+
+        System.out.println("USER = " + user);
 
         if (userService.save(user) != null) {
             redirect.addFlashAttribute("isSaved", true);

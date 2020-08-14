@@ -1,5 +1,7 @@
 package com.chhaya.thymeleaf;
 
+import com.chhaya.thymeleaf.model.Authority;
+import com.chhaya.thymeleaf.model.Role;
 import com.chhaya.thymeleaf.model.User;
 import com.chhaya.thymeleaf.repository.admin.mybatis.UserRepository;
 import com.chhaya.thymeleaf.service.admin.impl.UserServiceImpl;
@@ -8,30 +10,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 @SpringBootTest
 class ThymeleafApplicationTests {
 
+    @Autowired
     private UserServiceImpl userService;
+
+    @Autowired
     private UserRepository userRepository;
+
+    @Autowired
     private BCryptPasswordEncoder encoder;
-
-    @Autowired
-    public void setUserRepository(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
-    @Autowired
-    public void setUserService(UserServiceImpl userService) {
-        this.userService = userService;
-    }
-
-    @Autowired
-    public void setEncoder(BCryptPasswordEncoder encoder) {
-        this.encoder = encoder;
-    }
 
     @Test
     void contextLoads() {
@@ -113,8 +106,53 @@ class ThymeleafApplicationTests {
     }
 
     @Test
-    void createUserRole() {
-        //userRepository.createUserRole()
+    void createUserAuthority() {
+
+        User user = new User();
+        user.setUserId("87936382-4add-4e49-9dc8-32aa5c3d84ee");
+        user.setFirstName("Hor");
+        user.setLastName("Siekny");
+        user.setEmail("horsiekny@gmail.com");
+        user.setPassword("$2a$10$BzdbUIN2gi8MtI0GZXEyaumMDmozbPM.DmNGwu.pge8d1DG6nt/Km");
+
+        List<Role> roleList = new ArrayList<>();
+        List<Authority> authorityList = new ArrayList<>();
+
+        Authority auth1 = new Authority();
+        Authority auth2 = new Authority();
+        Authority auth3 = new Authority();
+
+        auth1.setId(1);
+        auth2.setId(2);
+        auth3.setId(3);
+
+        authorityList.add(auth1);
+        authorityList.add(auth2);
+        authorityList.add(auth3);
+
+        Role role = new Role();
+        role.setId(1);
+        role.setAuthorities(authorityList);
+
+        roleList.add(role);
+
+        user.setRoles(roleList);
+
+        System.out.println("TEST USER = " + user);
+
+        int roleId = user.getRoles().get(0).getId();
+
+        for (Authority authority : user.getRoles().get(0).getAuthorities()) {
+            boolean isInserted = userRepository.createUserAuthority(roleId, authority.getId());
+            System.out.println("SUCCESS = " + isInserted);
+            System.out.println("DONE");
+        }
+
+    }
+
+    @Test
+    void selectAuthoritiesByRoleId() {
+        System.out.println("AUTHORITIES BY ROLE ID = " + userRepository.findOne("d0a0593c-9f9c-41e4-bc7e-9ee5767c5af9"));
     }
 
 }

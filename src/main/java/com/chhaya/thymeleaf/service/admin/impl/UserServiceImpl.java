@@ -1,5 +1,6 @@
 package com.chhaya.thymeleaf.service.admin.impl;
 
+import com.chhaya.thymeleaf.model.Authority;
 import com.chhaya.thymeleaf.model.User;
 import com.chhaya.thymeleaf.repository.admin.mybatis.UserRepository;
 import com.chhaya.thymeleaf.service.admin.UserService;
@@ -33,6 +34,10 @@ public class UserServiceImpl implements UserService {
 
         if (userRepository.save(user)) {
             if (userRepository.createUserRole(user)) {
+                int roleId = user.getRoles().get(0).getId();
+                for (Authority authority : user.getRoles().get(0).getAuthorities()) {
+                    userRepository.createUserAuthority(roleId, authority.getId());
+                }
                 return user;
             }
         }
